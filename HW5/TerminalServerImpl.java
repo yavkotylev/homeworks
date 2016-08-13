@@ -101,7 +101,7 @@ public class TerminalServerImpl implements TerminalServer {
             try {
                 userList.get(id).putMoney(amount, pin);
                 writeToBD(userList);
-            } catch (RuntimeException e) {
+            } catch (Exception e) {
                 throw new RuntimeException(e.getMessage(), e);
             }
         } else {
@@ -223,7 +223,7 @@ class Account {
         checkLog();
 
         if (this.pin.equals(pin) == false) {
-            throw new Exception("Wrong pin!");
+            throw new RuntimeException("Wrong pin!");
         }
 
         if (money.compareTo(BigDecimal.ZERO) <= 0) {
@@ -236,22 +236,30 @@ class Account {
             throw new Exception("Попытка снять больше денег, чем есть на счету");
         }
 
+        if (money.doubleValue() % 100 != 0){
+            throw new Exception("Sum should be divided by 100!");
+        }
+
         amountMoney = amountMoney.subtract(money);
 
 
     }
 
-    void putMoney(BigDecimal money, String pin) throws RuntimeException {
+    void putMoney(BigDecimal money, String pin) throws Exception {
 
         checkLog();
 
         if (this.pin.equals(pin) == false) {
-            throw new RuntimeException("Wrong pin!");
+            throw new Exception("Wrong pin!");
         }
 
         if (money.compareTo(BigDecimal.ZERO) <= 0) {
             //TODO: change message
-            throw new RuntimeException("Нельзя добавить отрицатильное число или ноль");
+            throw new Exception("Нельзя добавить отрицатильное число или ноль");
+        }
+
+        if (money.doubleValue() % 100 != 0){
+            throw new Exception("Sum should be divided by 100!");
         }
 
         amountMoney = amountMoney.add(money);

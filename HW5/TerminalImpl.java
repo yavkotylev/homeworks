@@ -51,7 +51,7 @@ public class TerminalImpl implements Terminal {
 
     @Override
     public void getMoney(Commands commands) {
-        workWithMoney("You have successfully removed the money.", commands);
+        workWithMoney("You have successfully received the money.", commands);
     }
 
     @Override

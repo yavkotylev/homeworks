@@ -20,6 +20,7 @@ public class PinValidatorImpl implements PinValidator {
             count = 0;
             return true;
         } else {
+
             count++;
             if (count >= 3) {
                 int seconds = 5;
