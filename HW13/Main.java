@@ -1,3 +1,4 @@
+package homeworks.HW13;
 import java.util.Scanner;
 
 /**
