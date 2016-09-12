@@ -67,13 +67,13 @@ public class TerminalServerImpl implements TerminalServer {
     @Override
     public String signIn(String name, String pin) {
         try {
-            for (String i : userList.keySet()){
-                if (userList.get(i).loginUser(name, pin) == true){
+            for (String i : userList.keySet()) {
+                if (userList.get(i).loginUser(name, pin) == true) {
                     return i;
                 }
             }
-        } catch (RuntimeException e){
-            throw  new RuntimeException(e.getMessage(), e);
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e.getMessage(), e);
         }
 
         throw new RuntimeException("Wrong user id");
@@ -110,8 +110,8 @@ public class TerminalServerImpl implements TerminalServer {
     }
 
     @Override
-    public void logOut(String id){
-        if (userList.containsKey(id) == true){
+    public void logOut(String id) {
+        if (userList.containsKey(id) == true) {
             userList.get(id).logOut();
         } else {
             throw new RuntimeException("Wrong user id");
@@ -119,21 +119,19 @@ public class TerminalServerImpl implements TerminalServer {
 
         try {
             writeToBD(userList);
-        } catch (RuntimeException e){
+        } catch (RuntimeException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
     }
 
     @Override
-    public boolean checkPin(String id, String pin){
-        if (userList.containsKey(id) == true){
+    public boolean checkPin(String id, String pin) {
+        if (userList.containsKey(id) == true) {
             return userList.get(id).checkPin(pin);
-        }
-        else {
+        } else {
             throw new RuntimeException("Wrong user id!");
         }
     }
-
 
 
     private void writeToBD(String text) {
@@ -165,10 +163,10 @@ public class TerminalServerImpl implements TerminalServer {
     private void readBD(Map<String, Account> users, String filePath) {
 
         File file = new File(filePath);
-        if (file.exists() == false){
+        if (file.exists() == false) {
             try {
                 file.createNewFile();
-            } catch (Exception e){
+            } catch (Exception e) {
                 throw new RuntimeException("Exception creating file");
             }
         }
@@ -236,7 +234,7 @@ class Account {
             throw new Exception("Попытка снять больше денег, чем есть на счету");
         }
 
-        if (money.doubleValue() % 100 != 0){
+        if (money.doubleValue() % 100 != 0) {
             throw new Exception("Sum should be divided by 100!");
         }
 
@@ -246,59 +244,48 @@ class Account {
     }
 
     void putMoney(BigDecimal money, String pin) throws Exception {
-
         checkLog();
 
-        if (this.pin.equals(pin) == false) {
-            throw new Exception("Wrong pin!");
-        }
+        if (this.pin.equals(pin) == false) throw new Exception("Wrong pin!");
+
 
         if (money.compareTo(BigDecimal.ZERO) <= 0) {
             //TODO: change message
             throw new Exception("Нельзя добавить отрицатильное число или ноль");
         }
 
-        if (money.doubleValue() % 100 != 0){
-            throw new Exception("Sum should be divided by 100!");
-        }
+        if (money.doubleValue() % 100 != 0) throw new Exception("Sum should be divided by 100!");
 
         amountMoney = amountMoney.add(money);
     }
 
     String getStringInformation() {
-        String res = "";
-        res += id + " " + name + " " + pin + " " + amountMoney;
-        return res;
+        return "" + id + " " + name + " " + pin + " " + amountMoney;
     }
 
     BigDecimal getAmountMoney(String pin) throws RuntimeException {
         checkLog();
-        if (this.pin.equals(pin)) {
-            return amountMoney;
-        } else {
-            throw new RuntimeException("Wrong pin!");
-        }
+        if (this.pin.equals(pin)) return amountMoney;
+
+        throw new RuntimeException("Wrong pin!");
     }
 
+
     private void checkLog() throws RuntimeException {
-        if (login == false) {
-            throw new RuntimeException("User is not sign in");
-        }
+        if (login == false) throw new RuntimeException("User is not sign in");
     }
 
     boolean loginUser(String name, String pin) {
         if (this.name.equals(name)) {
-
             if (this.pin.equals(pin)) {
                 this.login = true;
                 return true;
-            } else {
-                throw new RuntimeException("Wrong pin!");
             }
-        } else {
-            return false;
-        }
+            throw new RuntimeException("Wrong pin!");
+
+        } else return false;
     }
+
 
     void logOut() {
         login = false;

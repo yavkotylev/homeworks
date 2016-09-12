@@ -6,7 +6,7 @@ package homeworks.HW5;
 public class PinValidatorImpl implements PinValidator {
     private final String userId;
     private final TerminalServer server;
-    int count;
+    private int count;
 
     public PinValidatorImpl(String userId, TerminalServer server) {
         this.server = server;
@@ -19,23 +19,23 @@ public class PinValidatorImpl implements PinValidator {
         if (server.checkPin(userId, PIN) == true) {
             count = 0;
             return true;
-        } else {
+        }
 
-            count++;
-            if (count >= 3) {
-                int seconds = 5;
-                System.out.println("Wrong PIN 3 times, wait " + seconds + " seconds");
-
-                while (seconds > 0) {
-                    System.out.println("Wait " + seconds + " seconds, please.");
-                    seconds--;
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException ignore) {
-                    }
+        count++;
+        if (count >= 3) {
+            int seconds = 5;
+            System.out.println("Wrong PIN 3 times, wait " + seconds + " seconds");
+            while (seconds > 0) {
+                System.out.println("Wait " + seconds + " seconds, please.");
+                seconds--;
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ignore) {
+                    ignore.printStackTrace();
                 }
             }
-            return false;
         }
+        return false;
     }
 }
+
